@@ -1,0 +1,11 @@
+# Ignore large/raw data assets
+data/
+home-credit-default-risk.zip
+
+# OS / editor artifacts
+*.log
+*.tmp
+*.swp
+.DS_Store
+.vscode/
+
