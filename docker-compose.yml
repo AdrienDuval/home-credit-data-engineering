@@ -1,0 +1,98 @@
+services:
+
+  # =========================
+  # PostgreSQL (Source A)
+  # =========================
+  postgres:
+    image: postgres:15
+    container_name: home_credit_postgres
+    restart: always
+    env_file: .env
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/postgres/init:/docker-entrypoint-initdb.d
+      - ./data/application:/data/application
+    networks:
+      - home_credit_net
+
+  # =========================
+  # HDFS NameNode
+  # =========================
+  namenode:
+    image: bde2020/hadoop-namenode:2.0.0-hadoop3.2.1-java8
+    container_name: home_credit_namenode
+    restart: always
+    environment:
+      - CLUSTER_NAME=home_credit_cluster
+      - CORE_CONF_fs_defaultFS=hdfs://namenode:8020
+    ports:
+      - "9870:9870"
+      - "8020:8020"
+    volumes:
+      - namenode_data:/hadoop/dfs/name
+    networks:
+      - home_credit_net
+
+  # =========================
+  # HDFS DataNode
+  # =========================
+  datanode:
+    image: bde2020/hadoop-datanode:2.0.0-hadoop3.2.1-java8
+    container_name: home_credit_datanode
+    restart: always
+    environment:
+      - CORE_CONF_fs_defaultFS=hdfs://namenode:8020
+      - SERVICE_PRECONDITION=namenode:9870
+    ports:
+      - "9864:9864"
+    volumes:
+      - datanode_data:/hadoop/dfs/data
+    depends_on:
+      - namenode
+    networks:
+      - home_credit_net
+
+  # =========================
+  # Spark Master (OFFICIAL)
+  # =========================
+  spark-master:
+    image: apache/spark:3.5.0
+    container_name: home_credit_spark_master
+    restart: always
+    command: /opt/spark/bin/spark-class org.apache.spark.deploy.master.Master
+    ports:
+      - "8080:8080"
+      - "7077:7077"
+    networks:
+      - home_credit_net
+    volumes:
+      - ./:/opt/spark/work-dir
+      - ./jars/postgresql-42.7.9.jar:/opt/spark/jars/postgresql.jar  # optional: copy into Spark's jars
+
+  # =========================
+  # Spark Worker (OFFICIAL)
+  # =========================
+  spark-worker:
+    image: apache/spark:3.5.0
+    container_name: home_credit_spark_worker
+    restart: always
+    command: /opt/spark/bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077
+    depends_on:
+      - spark-master
+    networks:
+      - home_credit_net
+
+volumes:
+  postgres_data:
+  namenode_data:
+  datanode_data:
+
+networks:
+  home_credit_net:
+    driver: bridge
