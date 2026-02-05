@@ -1,0 +1,18 @@
+2026-02-05 22:25:48 - __main__ - INFO - Log file: /opt/spark/work-dir/logs/bronze/feeder_csv.txt
+2026-02-05 22:25:48 - __main__ - INFO - Starting Bronze CSV ingestion job
+2026-02-05 22:25:48 - __main__ - INFO - Dataset: bureau
+2026-02-05 22:25:48 - __main__ - INFO - Input path: /opt/spark/work-dir/data/does_not_exist.csv
+2026-02-05 22:25:48 - __main__ - INFO - HDFS base path: hdfs://namenode:8020/raw/csv
+2026-02-05 22:25:48 - __main__ - INFO - Ingest date: 2026-02-05
+2026-02-05 22:25:51 - __main__ - INFO - Reading CSV from /opt/spark/work-dir/data/does_not_exist.csv
+2026-02-05 22:25:53 - __main__ - ERROR - Bronze CSV ingestion failed
+Traceback (most recent call last):
+  File "/opt/spark/work-dir/spark/bronze/feeder_csv.py", line 97, in main
+    spark.read
+  File "/opt/spark/python/lib/pyspark.zip/pyspark/sql/readwriter.py", line 740, in csv
+    return self._df(self._jreader.csv(self._spark._sc._jvm.PythonUtils.toSeq(path)))
+  File "/opt/spark/python/lib/py4j-0.10.9.7-src.zip/py4j/java_gateway.py", line 1322, in __call__
+    return_value = get_return_value(
+  File "/opt/spark/python/lib/pyspark.zip/pyspark/errors/exceptions/captured.py", line 185, in deco
+    raise converted from None
+pyspark.errors.exceptions.captured.AnalysisException: [PATH_NOT_FOUND] Path does not exist: file:/opt/spark/work-dir/data/does_not_exist.csv.

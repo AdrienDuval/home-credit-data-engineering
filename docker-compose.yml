@@ -87,6 +87,8 @@ services:
       - spark-master
     networks:
       - home_credit_net
+    volumes:
+      - ./:/opt/spark/work-dir
 
 volumes:
   postgres_data:

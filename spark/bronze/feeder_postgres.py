@@ -1,11 +1,25 @@
 import argparse
-import logging
 import os
+import sys
 import datetime
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import lit
 
-# Loggin configuration
+# Project root on path so we can import spark.common when run via spark-submit
+_SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+_PROJECT_ROOT = os.path.dirname(os.path.dirname(_SCRIPT_DIR))  # spark/bronze -> spark -> project root
+if _PROJECT_ROOT not in sys.path:
+    sys.path.insert(0, _PROJECT_ROOT)
+
+from spark.common.logger import setup_logger  # noqa: E402
+
+logger = setup_logger(
+    __name__,
+    log_dir="logs/bronze",
+    log_file_basename="feeder_postgres",
+)
+
+# Defaults
 DEFAULTS = {
     "jdbc_url": os.environ.get("JDBC_URL", "jdbc:postgresql://postgres:5432/home_credit"),
     "db_user": os.environ.get("POSTGRES_USER", "home_credit_user"),
@@ -13,15 +27,8 @@ DEFAULTS = {
     "db_schema": "raw",
     "table_name": "application_train",
     "hdfs_base_path": "hdfs://namenode:8020/raw/postgres",
-    "ingest_date": datetime.date.today().isoformat(),  # or datetime.date.today().isoformat()
+    "ingest_date": datetime.date.today().isoformat(),
 }
-
-logging.basicConfig(
-    level = logging.INFO,
-    format="%(asctime)s - %(levelname)s - %(message)s"
-)
-
-logger = logging.getLogger(__name__)
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Bronze ingestion from PostgreSQL")
@@ -38,71 +45,71 @@ def parse_args():
 
 def main():
     args = parse_args()
-    print("DEFAULTS['hdfs_base_path'] :", DEFAULTS["hdfs_base_path"])
     logger.info("Starting Bronze PostgreSQL ingestion job")
-    logger.info(f"Table: {args.db_schema}.{args.table_name}")
-    logger.info(f"Ingest date: {args.ingest_date}")
+    logger.info("Table: %s.%s", args.db_schema, args.table_name)
+    logger.info("Ingest date: %s", args.ingest_date)
 
-    # --------------------------------------------------
-    # Spark session
-    # --------------------------------------------------
-    spark = (
-        SparkSession.builder
-        .appName(f"bronze_postgres_{args.table_name}")
-        .getOrCreate()
-    )
+    try:
+        # --------------------------------------------------
+        # Spark session
+        # --------------------------------------------------
+        spark = (
+            SparkSession.builder
+            .appName(f"bronze_postgres_{args.table_name}")
+            .getOrCreate()
+        )
 
-    # --------------------------------------------------
-    # JDBC read (NO business logic here)
-    # --------------------------------------------------
-    jdbc_table = f"{args.db_schema}.{args.table_name}"
+        # --------------------------------------------------
+        # JDBC read (NO business logic here)
+        # --------------------------------------------------
+        jdbc_table = f"{args.db_schema}.{args.table_name}"
+        logger.info("Reading data from PostgreSQL via JDBC")
 
-    logger.info("Reading data from PostgreSQL via JDBC")
+        df = (
+            spark.read
+            .format("jdbc")
+            .option("url", args.jdbc_url)
+            .option("dbtable", jdbc_table)
+            .option("user", args.db_user)
+            .option("password", args.db_password)
+            .option("driver", "org.postgresql.Driver")
+            .load()
+        )
 
-    df = (
-        spark.read
-        .format("jdbc")
-        .option("url", args.jdbc_url)
-        .option("dbtable", jdbc_table)
-        .option("user", args.db_user)
-        .option("password", args.db_password)
-        .option("driver", "org.postgresql.Driver")
-        .load()
-    )
+        source_count = df.count()
+        logger.info("Rows read from source: %s", source_count)
 
-    source_count = df.count()
-    logger.info(f"Rows read from source: {source_count}")
+        # --------------------------------------------------
+        # Add technical lineage columns (ALLOWED in Bronze)
+        # --------------------------------------------------
+        df_bronze = (
+            df
+            .withColumn("ingest_date", lit(args.ingest_date))
+            .withColumn("source_system", lit("postgres"))
+        )
 
-    # --------------------------------------------------
-    # Add technical lineage columns (ALLOWED in Bronze)
-    # --------------------------------------------------
-    df_bronze = (
-        df
-        .withColumn("ingest_date", lit(args.ingest_date))
-        .withColumn("source_system", lit("postgres"))
-    )
+        # --------------------------------------------------
+        # Target HDFS path
+        # --------------------------------------------------
+        output_path = (
+            f"{args.hdfs_base_path}/application/"
+            f"{args.table_name}/ingest_date={args.ingest_date}"
+        )
+        logger.info("Writing Bronze data to HDFS: %s", output_path)
 
-    # --------------------------------------------------
-    # Target HDFS path
-    # --------------------------------------------------
-    output_path = (
-        f"{args.hdfs_base_path}/application/"
-        f"{args.table_name}/ingest_date={args.ingest_date}"
-    )
+        (
+            df_bronze
+            .write
+            .mode("overwrite")
+            .parquet(output_path)
+        )
 
-    logger.info(f"Writing Bronze data to HDFS: {output_path}")
-
-    (
-        df_bronze
-        .write
-        .mode("overwrite")
-        .parquet(output_path)
-    )
-
-    logger.info(f"Rows written to Bronze: {source_count}")
-    logger.info("Bronze PostgreSQL ingestion completed successfully")
-
-    spark.stop()
+        logger.info("Rows written to Bronze: %s", source_count)
+        logger.info("Bronze PostgreSQL ingestion completed successfully")
+        spark.stop()
+    except Exception:
+        logger.exception("Bronze PostgreSQL ingestion failed")
+        raise
 
 
 if __name__ == "__main__":
