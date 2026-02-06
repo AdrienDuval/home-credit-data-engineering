@@ -1,0 +1,11 @@
+2026-02-06 19:13:35 - __main__ - INFO - Log file: /opt/spark/work-dir/logs/gold/processor.txt
+2026-02-06 19:13:35 - __main__ - INFO - Gold processor start: silver_base=hdfs://namenode:8020/silver, gold_base=hdfs://namenode:8020/gold, ingest_date=2026-02-06
+2026-02-06 19:13:38 - __main__ - INFO - Reading Silver tables for partition year=2026/month=2/day=6
+2026-02-06 19:13:53 - __main__ - INFO - Silver row counts: application=663758, bureau_summary=305811, payment_behavior=339587, previous_applications=338857
+2026-02-06 19:14:02 - __main__ - INFO - Writing Gold to hdfs://namenode:8020/gold/gold_client_risk_profile (partitioned by year/month/day)
+2026-02-06 19:14:12 - __main__ - INFO - Gold gold_client_risk_profile written: 663758 rows
+2026-02-06 19:14:12 - __main__ - INFO - Reading gold_client_risk_profile from hdfs://namenode:8020/gold/gold_client_risk_profile/year=2026/month=2/day=6
+2026-02-06 19:14:12 - __main__ - INFO - gold_client_risk_profile rows: 663758
+2026-02-06 19:14:13 - __main__ - INFO - Writing Gold to hdfs://namenode:8020/gold/gold_portfolio_risk (partitioned by year/month/day)
+2026-02-06 19:14:16 - __main__ - INFO - Gold gold_portfolio_risk written: 3 rows (one per risk_segment)
+2026-02-06 19:14:17 - __main__ - INFO - Gold processor completed successfully

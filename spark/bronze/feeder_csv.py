@@ -1,7 +1,8 @@
 """
 Bronze ingestion from CSV files (Source B).
 Reads a single CSV dataset, adds lineage columns, writes to HDFS as Parquet
-partitioned by ingestion date (year/month/day). No business transformation.
+partitioned by ingest_date=YYYY-MM-DD (same layout as Postgres Bronze).
+No business transformation.
 """
 import argparse
 import os
@@ -60,12 +61,6 @@ def parse_args():
     return parser.parse_args()
 
 
-def parse_ingest_date(ingest_date_str: str):
-    """Parse YYYY-MM-DD into year, month, day for partition columns."""
-    dt = datetime.datetime.strptime(ingest_date_str, "%Y-%m-%d")
-    return dt.year, dt.month, dt.day
-
-
 def main():
     args = parse_args()
     logger.info("Starting Bronze CSV ingestion job")
@@ -73,12 +68,6 @@ def main():
     logger.info("Input path: %s", args.input_path)
     logger.info("HDFS base path: %s", args.hdfs_base_path)
     logger.info("Ingest date: %s", args.ingest_date)
-
-    try:
-        year, month, day = parse_ingest_date(args.ingest_date)
-    except ValueError as e:
-        logger.error("Invalid ingest-date (use YYYY-MM-DD): %s", e)
-        raise
 
     try:
         # -------------------------------------------------------------------------
@@ -109,21 +98,19 @@ def main():
         df_bronze = (
             df.withColumn("ingest_date", lit(args.ingest_date))
             .withColumn("source_system", lit("csv"))
-            .withColumn("year", lit(year))
-            .withColumn("month", lit(month))
-            .withColumn("day", lit(day))
         )
 
         # -------------------------------------------------------------------------
-        # Write to HDFS: Parquet, partitioned by year/month/day (exam requirement)
+        # Write to HDFS: Parquet, partitioned by ingest_date (same as Postgres)
+        # Path: /raw/csv/<dataset_name>/ingest_date=YYYY-MM-DD
         # -------------------------------------------------------------------------
         output_path = f"{args.hdfs_base_path.rstrip('/')}/{args.dataset_name}"
-        logger.info("Writing Bronze data to HDFS: %s (partitioned by year/month/day)", output_path)
+        logger.info("Writing Bronze data to HDFS: %s (partitioned by ingest_date)", output_path)
 
         (
             df_bronze.write
             .mode("overwrite")
-            .partitionBy("year", "month", "day")
+            .partitionBy("ingest_date")
             .parquet(output_path)
         )
 

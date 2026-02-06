@@ -16,3 +16,80 @@ Traceback (most recent call last):
   File "/opt/spark/python/lib/pyspark.zip/pyspark/errors/exceptions/captured.py", line 185, in deco
     raise converted from None
 pyspark.errors.exceptions.captured.AnalysisException: [PATH_NOT_FOUND] Path does not exist: file:/opt/spark/work-dir/data/does_not_exist.csv.
+2026-02-06 10:07:31 - __main__ - INFO - Log file: /opt/spark/work-dir/logs/bronze/feeder_csv.txt
+2026-02-06 10:07:31 - __main__ - INFO - Starting Bronze CSV ingestion job
+2026-02-06 10:07:31 - __main__ - INFO - Dataset: bureau
+2026-02-06 10:07:31 - __main__ - INFO - Input path: /opt/spark/work-dir/data/bureau.csv
+2026-02-06 10:07:31 - __main__ - INFO - HDFS base path: hdfs://namenode:8020/raw/csv
+2026-02-06 10:07:31 - __main__ - INFO - Ingest date: 2026-02-06
+2026-02-06 10:07:33 - __main__ - INFO - Reading CSV from /opt/spark/work-dir/data/bureau.csv
+2026-02-06 10:07:47 - __main__ - INFO - Rows read from source: 1716428
+2026-02-06 10:07:47 - __main__ - INFO - Writing Bronze data to HDFS: hdfs://namenode:8020/raw/csv/bureau (partitioned by ingest_date)
+2026-02-06 10:08:02 - __main__ - INFO - Rows written to Bronze: 1716428
+2026-02-06 10:08:02 - __main__ - INFO - Bronze CSV ingestion completed successfully
+2026-02-06 10:08:43 - __main__ - INFO - Log file: /opt/spark/work-dir/logs/bronze/feeder_csv.txt
+2026-02-06 10:08:43 - __main__ - INFO - Starting Bronze CSV ingestion job
+2026-02-06 10:08:43 - __main__ - INFO - Dataset: bureau_balance
+2026-02-06 10:08:43 - __main__ - INFO - Input path: /opt/spark/work-dir/data/bureau_balance.csv
+2026-02-06 10:08:43 - __main__ - INFO - HDFS base path: hdfs://namenode:8020/raw/csv
+2026-02-06 10:08:43 - __main__ - INFO - Ingest date: 2026-02-06
+2026-02-06 10:08:47 - __main__ - INFO - Reading CSV from /opt/spark/work-dir/data/bureau_balance.csv
+2026-02-06 10:09:24 - __main__ - INFO - Rows read from source: 27299925
+2026-02-06 10:09:24 - __main__ - INFO - Writing Bronze data to HDFS: hdfs://namenode:8020/raw/csv/bureau_balance (partitioned by ingest_date)
+2026-02-06 10:10:06 - __main__ - INFO - Rows written to Bronze: 27299925
+2026-02-06 10:10:06 - __main__ - INFO - Bronze CSV ingestion completed successfully
+2026-02-06 10:10:17 - __main__ - INFO - Log file: /opt/spark/work-dir/logs/bronze/feeder_csv.txt
+2026-02-06 10:10:17 - __main__ - INFO - Starting Bronze CSV ingestion job
+2026-02-06 10:10:17 - __main__ - INFO - Dataset: installments_payments
+2026-02-06 10:10:17 - __main__ - INFO - Input path: /opt/spark/work-dir/data/installments_payments.csv
+2026-02-06 10:10:17 - __main__ - INFO - HDFS base path: hdfs://namenode:8020/raw/csv
+2026-02-06 10:10:17 - __main__ - INFO - Ingest date: 2026-02-06
+2026-02-06 10:10:21 - __main__ - INFO - Reading CSV from /opt/spark/work-dir/data/installments_payments.csv
+2026-02-06 10:10:58 - __main__ - INFO - Rows read from source: 13605401
+2026-02-06 10:10:58 - __main__ - INFO - Writing Bronze data to HDFS: hdfs://namenode:8020/raw/csv/installments_payments (partitioned by ingest_date)
+2026-02-06 10:11:40 - __main__ - INFO - Rows written to Bronze: 13605401
+2026-02-06 10:11:40 - __main__ - INFO - Bronze CSV ingestion completed successfully
+2026-02-06 10:17:10 - __main__ - INFO - Log file: /opt/spark/work-dir/logs/bronze/feeder_csv.txt
+2026-02-06 10:17:10 - __main__ - INFO - Starting Bronze CSV ingestion job
+2026-02-06 10:17:10 - __main__ - INFO - Dataset: credit_card_balance
+2026-02-06 10:17:10 - __main__ - INFO - Input path: /opt/spark/work-dir/data/credit_card_balance.csv
+2026-02-06 10:17:10 - __main__ - INFO - HDFS base path: hdfs://namenode:8020/raw/csv
+2026-02-06 10:17:10 - __main__ - INFO - Ingest date: 2026-02-06
+2026-02-06 10:17:13 - __main__ - INFO - Reading CSV from /opt/spark/work-dir/data/credit_card_balance.csv
+2026-02-06 10:17:46 - __main__ - INFO - Rows read from source: 3840312
+2026-02-06 10:17:46 - __main__ - INFO - Writing Bronze data to HDFS: hdfs://namenode:8020/raw/csv/credit_card_balance (partitioned by ingest_date)
+2026-02-06 10:18:22 - __main__ - INFO - Rows written to Bronze: 3840312
+2026-02-06 10:18:22 - __main__ - INFO - Bronze CSV ingestion completed successfully
+2026-02-06 10:18:40 - __main__ - INFO - Log file: /opt/spark/work-dir/logs/bronze/feeder_csv.txt
+2026-02-06 10:18:40 - __main__ - INFO - Starting Bronze CSV ingestion job
+2026-02-06 10:18:40 - __main__ - INFO - Dataset: pos_cash_balance
+2026-02-06 10:18:40 - __main__ - INFO - Input path: /opt/spark/work-dir/data/POS_CASH_balance.csv
+2026-02-06 10:18:40 - __main__ - INFO - HDFS base path: hdfs://namenode:8020/raw/csv
+2026-02-06 10:18:40 - __main__ - INFO - Ingest date: 2026-02-06
+2026-02-06 10:18:47 - __main__ - INFO - Reading CSV from /opt/spark/work-dir/data/POS_CASH_balance.csv
+2026-02-06 10:19:26 - __main__ - INFO - Rows read from source: 10001358
+2026-02-06 10:19:26 - __main__ - INFO - Writing Bronze data to HDFS: hdfs://namenode:8020/raw/csv/pos_cash_balance (partitioned by ingest_date)
+2026-02-06 10:19:57 - __main__ - INFO - Rows written to Bronze: 10001358
+2026-02-06 10:19:57 - __main__ - INFO - Bronze CSV ingestion completed successfully
+2026-02-06 10:25:22 - __main__ - INFO - Log file: /opt/spark/work-dir/logs/bronze/feeder_csv.txt
+2026-02-06 10:25:22 - __main__ - INFO - Starting Bronze CSV ingestion job
+2026-02-06 10:25:22 - __main__ - INFO - Dataset: previous_application
+2026-02-06 10:25:22 - __main__ - INFO - Input path: /opt/spark/work-dir/data/previous_application.csv
+2026-02-06 10:25:22 - __main__ - INFO - HDFS base path: hdfs://namenode:8020/raw/csv
+2026-02-06 10:25:22 - __main__ - INFO - Ingest date: 2026-02-06
+2026-02-06 10:25:26 - __main__ - INFO - Reading CSV from /opt/spark/work-dir/data/previous_application.csv
+2026-02-06 10:25:54 - __main__ - INFO - Rows read from source: 1670214
+2026-02-06 10:25:54 - __main__ - INFO - Writing Bronze data to HDFS: hdfs://namenode:8020/raw/csv/previous_application (partitioned by ingest_date)
+2026-02-06 10:26:17 - __main__ - INFO - Rows written to Bronze: 1670214
+2026-02-06 10:26:17 - __main__ - INFO - Bronze CSV ingestion completed successfully
+2026-02-06 18:34:00 - __main__ - INFO - Log file: /opt/spark/work-dir/logs/bronze/feeder_csv.txt
+2026-02-06 18:34:00 - __main__ - INFO - Starting Bronze CSV ingestion job
+2026-02-06 18:34:00 - __main__ - INFO - Dataset: installments_payments
+2026-02-06 18:34:00 - __main__ - INFO - Input path: /opt/spark/work-dir/data/installments_payments.csv
+2026-02-06 18:34:00 - __main__ - INFO - HDFS base path: hdfs://namenode:8020/raw/csv
+2026-02-06 18:34:00 - __main__ - INFO - Ingest date: 2026-02-06
+2026-02-06 18:34:03 - __main__ - INFO - Reading CSV from /opt/spark/work-dir/data/installments_payments.csv
+2026-02-06 18:34:45 - __main__ - INFO - Rows read from source: 13605401
+2026-02-06 18:34:46 - __main__ - INFO - Writing Bronze data to HDFS: hdfs://namenode:8020/raw/csv/installments_payments (partitioned by ingest_date)
+2026-02-06 18:35:30 - __main__ - INFO - Rows written to Bronze: 13605401
+2026-02-06 18:35:30 - __main__ - INFO - Bronze CSV ingestion completed successfully
