@@ -9,3 +9,76 @@
 2026-02-06 19:14:13 - __main__ - INFO - Writing Gold to hdfs://namenode:8020/gold/gold_portfolio_risk (partitioned by year/month/day)
 2026-02-06 19:14:16 - __main__ - INFO - Gold gold_portfolio_risk written: 3 rows (one per risk_segment)
 2026-02-06 19:14:17 - __main__ - INFO - Gold processor completed successfully
+2026-02-06 19:54:52 - __main__ - INFO - Log file: /opt/spark/work-dir/logs/gold/processor.txt
+2026-02-06 19:54:52 - __main__ - INFO - Gold processor start: silver_base=hdfs://namenode:8020/silver, gold_base=hdfs://namenode:8020/gold, ingest_date=2026-02-06
+2026-02-06 19:54:54 - __main__ - INFO - Reading Silver tables for partition year=2026/month=2/day=6
+2026-02-06 19:55:08 - __main__ - INFO - Silver row counts: application=663758, bureau_summary=305811, payment_behavior=339587, previous_applications=338857
+2026-02-06 19:55:15 - __main__ - INFO - Writing Gold to hdfs://namenode:8020/gold/gold_client_risk_profile (partitioned by year/month/day)
+2026-02-06 19:55:27 - __main__ - INFO - Gold gold_client_risk_profile written: 663758 rows
+2026-02-06 19:55:27 - __main__ - INFO - Reading gold_client_risk_profile from hdfs://namenode:8020/gold/gold_client_risk_profile/year=2026/month=2/day=6
+2026-02-06 19:55:28 - __main__ - INFO - gold_client_risk_profile rows: 663758
+2026-02-06 19:55:28 - __main__ - INFO - Writing Gold to hdfs://namenode:8020/gold/gold_portfolio_risk (partitioned by year/month/day)
+2026-02-06 19:55:32 - __main__ - INFO - Gold gold_portfolio_risk written: 3 rows (one per risk_segment)
+2026-02-06 19:55:32 - __main__ - INFO - Gold processor completed successfully
+2026-02-06 19:57:47 - __main__ - INFO - Log file: /opt/spark/work-dir/logs/gold/processor.txt
+2026-02-06 19:57:47 - __main__ - INFO - Gold processor start: silver_base=hdfs://namenode:8020/silver, gold_base=hdfs://namenode:8020/gold, ingest_date=2026-02-06
+2026-02-06 19:57:49 - __main__ - INFO - Reading Silver tables for partition year=2026/month=2/day=6
+2026-02-06 19:58:06 - __main__ - INFO - Silver row counts: application=663758, bureau_summary=305811, payment_behavior=339587, previous_applications=338857
+2026-02-06 19:58:15 - __main__ - INFO - Writing Gold to hdfs://namenode:8020/gold/gold_client_risk_profile (partitioned by year/month/day)
+2026-02-06 19:58:31 - __main__ - INFO - Gold gold_client_risk_profile written: 663758 rows
+2026-02-06 19:58:31 - __main__ - INFO - Reading gold_client_risk_profile from hdfs://namenode:8020/gold/gold_client_risk_profile/year=2026/month=2/day=6
+2026-02-06 19:58:32 - __main__ - INFO - gold_client_risk_profile rows: 663758
+2026-02-06 19:58:32 - __main__ - INFO - Writing Gold to hdfs://namenode:8020/gold/gold_portfolio_risk (partitioned by year/month/day)
+2026-02-06 19:58:36 - __main__ - INFO - Gold gold_portfolio_risk written: 3 rows (one per risk_segment)
+2026-02-06 19:58:36 - __main__ - INFO - Writing Gold to PostgreSQL datamart (for Power BI)
+2026-02-06 19:58:36 - __main__ - INFO - Reading gold_client_risk_profile from hdfs://namenode:8020/gold/gold_client_risk_profile/year=2026/month=2/day=6 for datamart
+2026-02-06 19:58:37 - __main__ - INFO - Writing to datamart.datamart_client_risk (mode overwrite)
+2026-02-06 19:58:47 - __main__ - INFO - Reading gold_portfolio_risk from hdfs://namenode:8020/gold/gold_portfolio_risk/year=2026/month=2/day=6 for datamart
+2026-02-06 19:58:47 - __main__ - INFO - Writing to datamart.datamart_portfolio_summary (mode overwrite)
+2026-02-06 19:58:47 - __main__ - INFO - Datamart write completed: datamart.datamart_client_risk, datamart.datamart_portfolio_summary
+2026-02-06 19:58:48 - __main__ - INFO - Gold processor completed successfully
+2026-02-06 19:58:56 - __main__ - INFO - Log file: /opt/spark/work-dir/logs/gold/processor.txt
+2026-02-06 19:58:56 - __main__ - INFO - Gold processor start: silver_base=hdfs://namenode:8020/silver, gold_base=hdfs://namenode:8020/gold, ingest_date=2026-02-06
+2026-02-06 19:58:59 - __main__ - INFO - Reading Silver tables for partition year=2026/month=2/day=6
+2026-02-06 19:59:32 - __main__ - INFO - Silver row counts: application=663758, bureau_summary=305811, payment_behavior=339587, previous_applications=338857
+2026-02-06 19:59:42 - __main__ - INFO - Writing Gold to hdfs://namenode:8020/gold/gold_client_risk_profile (partitioned by year/month/day)
+2026-02-06 20:00:04 - __main__ - INFO - Gold gold_client_risk_profile written: 663758 rows
+2026-02-06 20:00:04 - __main__ - INFO - Reading gold_client_risk_profile from hdfs://namenode:8020/gold/gold_client_risk_profile/year=2026/month=2/day=6
+2026-02-06 20:00:05 - __main__ - INFO - gold_client_risk_profile rows: 663758
+2026-02-06 20:00:05 - __main__ - INFO - Writing Gold to hdfs://namenode:8020/gold/gold_portfolio_risk (partitioned by year/month/day)
+2026-02-06 20:00:12 - __main__ - INFO - Gold gold_portfolio_risk written: 3 rows (one per risk_segment)
+2026-02-06 20:00:12 - __main__ - INFO - Writing Gold to PostgreSQL datamart (for Power BI)
+2026-02-06 20:00:12 - __main__ - INFO - Reading gold_client_risk_profile from hdfs://namenode:8020/gold/gold_client_risk_profile/year=2026/month=2/day=6 for datamart
+2026-02-06 20:00:12 - __main__ - INFO - Writing to datamart.datamart_client_risk (mode overwrite)
+2026-02-06 20:00:26 - __main__ - INFO - Reading gold_portfolio_risk from hdfs://namenode:8020/gold/gold_portfolio_risk/year=2026/month=2/day=6 for datamart
+2026-02-06 20:00:27 - __main__ - INFO - Writing to datamart.datamart_portfolio_summary (mode overwrite)
+2026-02-06 20:00:27 - __main__ - INFO - Datamart write completed: datamart.datamart_client_risk, datamart.datamart_portfolio_summary
+2026-02-06 20:00:28 - __main__ - INFO - Gold processor completed successfully
+2026-02-07 14:36:55 - __main__ - INFO - Log file: /opt/spark/work-dir/logs/gold/processor.txt
+2026-02-07 14:36:55 - __main__ - INFO - Gold processor start: silver_base=hdfs://namenode:8020/silver, gold_base=hdfs://namenode:8020/gold, ingest_date=2026-02-07
+2026-02-07 14:36:57 - __main__ - INFO - Reading Silver tables for partition year=2026/month=2/day=7
+2026-02-07 14:37:13 - __main__ - INFO - Silver row counts: application=971265, bureau_summary=305811, payment_behavior=339587, previous_applications=338857
+2026-02-07 14:37:23 - __main__ - INFO - Writing Gold to hdfs://namenode:8020/gold/gold_client_risk_profile (partitioned by year/month/day)
+2026-02-07 14:37:43 - __main__ - INFO - Gold gold_client_risk_profile written: 971265 rows
+2026-02-07 14:37:43 - __main__ - INFO - Reading gold_client_risk_profile from hdfs://namenode:8020/gold/gold_client_risk_profile/year=2026/month=2/day=7
+2026-02-07 14:37:44 - __main__ - INFO - gold_client_risk_profile rows: 971265
+2026-02-07 14:37:44 - __main__ - INFO - Writing Gold to hdfs://namenode:8020/gold/gold_portfolio_risk (partitioned by year/month/day)
+2026-02-07 14:37:49 - __main__ - INFO - Gold gold_portfolio_risk written: 3 rows (one per risk_segment)
+2026-02-07 14:37:49 - __main__ - INFO - Gold processor completed successfully
+2026-02-07 14:38:37 - __main__ - INFO - Log file: /opt/spark/work-dir/logs/gold/processor.txt
+2026-02-07 14:38:37 - __main__ - INFO - Gold processor start: silver_base=hdfs://namenode:8020/silver, gold_base=hdfs://namenode:8020/gold, ingest_date=2026-02-07
+2026-02-07 14:38:41 - __main__ - INFO - Reading Silver tables for partition year=2026/month=2/day=7
+2026-02-07 14:39:00 - __main__ - INFO - Silver row counts: application=971265, bureau_summary=305811, payment_behavior=339587, previous_applications=338857
+2026-02-07 14:39:07 - __main__ - INFO - Writing Gold to hdfs://namenode:8020/gold/gold_client_risk_profile (partitioned by year/month/day)
+2026-02-07 14:39:22 - __main__ - INFO - Gold gold_client_risk_profile written: 971265 rows
+2026-02-07 14:39:22 - __main__ - INFO - Reading gold_client_risk_profile from hdfs://namenode:8020/gold/gold_client_risk_profile/year=2026/month=2/day=7
+2026-02-07 14:39:22 - __main__ - INFO - gold_client_risk_profile rows: 971265
+2026-02-07 14:39:23 - __main__ - INFO - Writing Gold to hdfs://namenode:8020/gold/gold_portfolio_risk (partitioned by year/month/day)
+2026-02-07 14:39:27 - __main__ - INFO - Gold gold_portfolio_risk written: 3 rows (one per risk_segment)
+2026-02-07 14:39:27 - __main__ - INFO - Writing Gold to PostgreSQL datamart (for Power BI)
+2026-02-07 14:39:27 - __main__ - INFO - Reading gold_client_risk_profile from hdfs://namenode:8020/gold/gold_client_risk_profile/year=2026/month=2/day=7 for datamart
+2026-02-07 14:39:27 - __main__ - INFO - Writing to datamart.datamart_client_risk (mode overwrite)
+2026-02-07 14:39:39 - __main__ - INFO - Reading gold_portfolio_risk from hdfs://namenode:8020/gold/gold_portfolio_risk/year=2026/month=2/day=7 for datamart
+2026-02-07 14:39:39 - __main__ - INFO - Writing to datamart.datamart_portfolio_summary (mode overwrite)
+2026-02-07 14:39:39 - __main__ - INFO - Datamart write completed: datamart.datamart_client_risk, datamart.datamart_portfolio_summary
+2026-02-07 14:39:40 - __main__ - INFO - Gold processor completed successfully

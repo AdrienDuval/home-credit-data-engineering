@@ -2,7 +2,11 @@
 
 Commands to run from your host (PowerShell or bash). Containers must be up (`docker compose up -d`).
 
+**Présentation du projet (objectifs, Docker, architecture medaillon, résultats) :** voir **[PRESENTATION_PROJET.md](PRESENTATION_PROJET.md)** (script de présentation en français).
+
 **Log files:** Bronze: `logs/bronze/feeder_postgres.txt`, `logs/bronze/feeder_csv.txt`. Silver: `logs/silver/processor.txt`. Gold: `logs/gold/processor.txt`. All append; use for debugging.
+
+**Full datamart (client list, client detail by ID, bureau, previous applications):** see **[DATAMART_SETUP.md](DATAMART_SETUP.md)** for a step-by-step checklist and all commands.
 
 ---
 
@@ -186,6 +190,80 @@ docker exec -it home_credit_spark_master /opt/spark/bin/spark-submit --master sp
 ```
 
 **What to check:** In `logs/gold/processor.txt`, look for row counts for both Gold tables. On HDFS browse `/gold/gold_client_risk_profile/` and `/gold/gold_portfolio_risk/` for the partition.
+
+**Rounding:** Numeric columns are rounded for readability (income/credit_exposure: 0 decimals; ratios/rates: 2–3 decimals; delay days/score: 2 decimals). Negative delay = paid early.
+
+### 5.1 Write Gold to PostgreSQL (datamart for Power BI)
+
+To connect Power BI to the Gold data, write the Gold tables into PostgreSQL in the `datamart` schema (`datamart.datamart_client_risk`, `datamart.datamart_portfolio_summary`). The plan requires Spark to load datamarts via JDBC.
+
+**One-time: create the `datamart` schema**
+
+If Postgres was started with the project’s init scripts, the schema may already exist. Otherwise create it once:
+
+```bash
+docker exec -it home_credit_postgres psql -U home_credit_user -d home_credit -c "CREATE SCHEMA IF NOT EXISTS datamart;"
+```
+
+**Run Gold and write to datamart (same run):**
+
+```bash
+docker exec -it home_credit_spark_master /opt/spark/bin/spark-submit --master spark://spark-master:7077 --jars /opt/spark/work-dir/jars/postgresql-42.7.9.jar /opt/spark/work-dir/spark/gold/processor.py --ingest-date 2026-02-06 --write-datamart
+```
+
+Use the same `--ingest-date` as your Gold partition. If your Postgres user/password or port differ, override:
+
+```bash
+docker exec -it home_credit_spark_master /opt/spark/bin/spark-submit --master spark://spark-master:7077 --jars /opt/spark/work-dir/jars/postgresql-42.7.9.jar /opt/spark/work-dir/spark/gold/processor.py --ingest-date 2026-02-06 --write-datamart --jdbc-url "jdbc:postgresql://postgres:5432/home_credit" --jdbc-user home_credit_user --jdbc-password home_credit_pwd
+```
+
+**Power BI:** See **[POWER_BI_DASHBOARD.md](POWER_BI_DASHBOARD.md)** for connection steps and how to build the three required charts (risk distribution, default rate per segment, credit exposure per segment).
+
+### 5.2 Verify PostgreSQL datamart (ready for Power BI)
+
+Check that the datamart schema and tables exist and contain data.
+
+**1. List schema and tables**
+
+```bash
+docker exec -it home_credit_postgres psql -U home_credit_user -d home_credit -c "\dn datamart"
+docker exec -it home_credit_postgres psql -U home_credit_user -d home_credit -c "\dt datamart.*"
+```
+
+You should see schema `datamart` and tables `datamart_client_risk`, `datamart_portfolio_summary`.
+
+**2. Row counts**
+
+```bash
+docker exec -it home_credit_postgres psql -U home_credit_user -d home_credit -c "SELECT COUNT(*) AS client_count FROM datamart.datamart_client_risk;"
+docker exec -it home_credit_postgres psql -U home_credit_user -d home_credit -c "SELECT * FROM datamart.datamart_portfolio_summary ORDER BY risk_segment;"
+```
+
+- `datamart_client_risk` should have one row per client (e.g. hundreds of thousands).
+- `datamart_portfolio_summary` should have 3 rows (HIGH, MEDIUM, LOW) with `client_count`, `total_exposure`, `avg_default_rate`, `avg_income`.
+
+**3. Sample rows (client risk)**
+
+```bash
+docker exec -it home_credit_postgres psql -U home_credit_user -d home_credit -c "SELECT sk_id_curr, income, credit_exposure, risk_segment, default_flag FROM datamart.datamart_client_risk LIMIT 5;"
+```
+
+If all of the above return data without errors, the DB is **ready for Power BI**. Use the same server/database/user in Power BI (server = `localhost` if connecting from your machine, port = value of `POSTGRES_PORT` in `.env`, usually 5432).
+
+### 5.3 Extended datamart (bureau + previous applications)
+
+To show **per-client bureau credits** and **previous applications** in the Next.js dashboard (client detail page), load them from Bronze into PostgreSQL:
+
+- **datamart.datamart_client_bureau** — one row per bureau credit per client
+- **datamart.datamart_client_previous_apps** — one row per previous application per client
+
+Use the **same `--ingest-date`** as your Bronze CSV run (so the partition `year=.../month=.../day=...` exists under `/raw/csv/bureau` and `/raw/csv/previous_application`).
+
+```bash
+docker exec -it home_credit_spark_master /opt/spark/bin/spark-submit --master spark://spark-master:7077 --jars /opt/spark/work-dir/jars/postgresql-42.7.9.jar /opt/spark/work-dir/spark/gold/datamart_extended.py --ingest-date 2026-02-06 --bronze-csv-base hdfs://namenode:8020/raw/csv --jdbc-url "jdbc:postgresql://postgres:5432/home_credit" --jdbc-user home_credit_user --jdbc-password home_credit_pwd
+```
+
+After this, the API endpoints `GET /clients/risk/{id}/bureau` and `GET /clients/risk/{id}/previous-applications` return data, and the client detail page in the frontend shows the two tables.
 
 ---
 

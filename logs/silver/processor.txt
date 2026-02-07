@@ -103,3 +103,79 @@
 2026-02-06 18:53:45 - __main__ - INFO - Writing Silver to hdfs://namenode:8020/silver/silver_previous_applications (partitioned by year/month/day)
 2026-02-06 18:54:01 - __main__ - INFO - Silver silver_previous_applications written: 338857 rows
 2026-02-06 18:54:02 - __main__ - INFO - Silver processor completed successfully
+2026-02-06 19:49:36 - __main__ - INFO - Log file: /opt/spark/work-dir/logs/silver/processor.txt
+2026-02-06 19:49:36 - __main__ - INFO - Silver processor (steps 1–4: client_application, bureau_summary, payment_behavior, previous_applications)
+2026-02-06 19:49:36 - __main__ - INFO - Bronze Postgres base: hdfs://namenode:8020/raw/postgres
+2026-02-06 19:49:36 - __main__ - INFO - Bronze CSV base: hdfs://namenode:8020/raw/csv
+2026-02-06 19:49:36 - __main__ - INFO - Silver base: hdfs://namenode:8020/silver
+2026-02-06 19:49:36 - __main__ - INFO - Ingest date: 2026-02-06
+2026-02-06 19:49:40 - __main__ - INFO - Reading Bronze application_train from hdfs://namenode:8020/raw/postgres/application/application_train
+2026-02-06 19:49:40 - __main__ - INFO - Reading Bronze application_test from hdfs://namenode:8020/raw/postgres/application/application_test
+2026-02-06 19:49:56 - __main__ - INFO - Bronze rows: application_train=615022, application_test=48744
+2026-02-06 19:49:58 - __main__ - INFO - Union total rows: 663766
+2026-02-06 19:50:11 - __main__ - INFO - Validation failures: SK_ID_CURR null=0, AMT_INCOME_TOTAL invalid=0, AMT_CREDIT invalid=0, age<18=0, AMT_ANNUITY invalid=0, AMT_CREDIT<AMT_ANNUITY=0, CODE_GENDER invalid=8
+2026-02-06 19:50:13 - __main__ - INFO - Rows passing all 7 validation rules: 663758 (dropped 8)
+2026-02-06 19:50:13 - __main__ - INFO - Writing Silver to hdfs://namenode:8020/silver/silver_client_application (partitioned by year/month/day)
+2026-02-06 19:51:00 - __main__ - INFO - Silver silver_client_application written: 663758 rows
+2026-02-06 19:51:00 - __main__ - INFO - Reading Bronze bureau from hdfs://namenode:8020/raw/csv/bureau
+2026-02-06 19:51:00 - __main__ - INFO - Reading Bronze bureau_balance from hdfs://namenode:8020/raw/csv/bureau_balance
+2026-02-06 19:51:02 - __main__ - INFO - Bronze rows: bureau=1716428, bureau_balance=27299925
+2026-02-06 19:51:07 - __main__ - INFO - silver_bureau_summary: client rows before validation = 305811
+2026-02-06 19:51:08 - __main__ - INFO - silver_bureau_summary: SK_ID_CURR null rows = 0
+2026-02-06 19:51:10 - __main__ - INFO - silver_bureau_summary: valid client rows = 305811 (dropped 0)
+2026-02-06 19:51:10 - __main__ - INFO - Writing Silver to hdfs://namenode:8020/silver/silver_bureau_summary (partitioned by year/month/day)
+2026-02-06 19:51:27 - __main__ - INFO - Silver silver_bureau_summary written: 305811 rows
+2026-02-06 19:51:27 - __main__ - INFO - Reading Bronze installments_payments from hdfs://namenode:8020/raw/csv/installments_payments
+2026-02-06 19:51:28 - __main__ - INFO - Bronze rows: installments_payments=13605401
+2026-02-06 19:52:04 - __main__ - INFO - Cached installments_payments for reuse
+2026-02-06 19:52:09 - __main__ - INFO - silver_payment_behavior: client rows before validation = 339587
+2026-02-06 19:52:10 - __main__ - INFO - silver_payment_behavior: SK_ID_CURR null rows = 0
+2026-02-06 19:52:13 - __main__ - INFO - silver_payment_behavior: valid client rows = 339587 (dropped 0)
+2026-02-06 19:52:13 - __main__ - INFO - Writing Silver to hdfs://namenode:8020/silver/silver_payment_behavior (partitioned by year/month/day)
+2026-02-06 19:52:22 - __main__ - INFO - Silver silver_payment_behavior written: 339587 rows
+2026-02-06 19:52:22 - __main__ - INFO - Reading Bronze previous_application from hdfs://namenode:8020/raw/csv/previous_application
+2026-02-06 19:52:24 - __main__ - INFO - Bronze rows: previous_application=1670214
+2026-02-06 19:52:30 - __main__ - INFO - silver_previous_applications: client rows before validation = 338857
+2026-02-06 19:52:31 - __main__ - INFO - silver_previous_applications: SK_ID_CURR null rows = 0
+2026-02-06 19:52:35 - __main__ - INFO - silver_previous_applications: valid client rows = 338857 (dropped 0)
+2026-02-06 19:52:35 - __main__ - INFO - Writing Silver to hdfs://namenode:8020/silver/silver_previous_applications (partitioned by year/month/day)
+2026-02-06 19:52:48 - __main__ - INFO - Silver silver_previous_applications written: 338857 rows
+2026-02-06 19:52:49 - __main__ - INFO - Silver processor completed successfully
+2026-02-07 14:24:29 - __main__ - INFO - Log file: /opt/spark/work-dir/logs/silver/processor.txt
+2026-02-07 14:24:29 - __main__ - INFO - Silver processor (steps 1–4: client_application, bureau_summary, payment_behavior, previous_applications)
+2026-02-07 14:24:29 - __main__ - INFO - Bronze Postgres base: hdfs://namenode:8020/raw/postgres
+2026-02-07 14:24:29 - __main__ - INFO - Bronze CSV base: hdfs://namenode:8020/raw/csv
+2026-02-07 14:24:29 - __main__ - INFO - Silver base: hdfs://namenode:8020/silver
+2026-02-07 14:24:29 - __main__ - INFO - Ingest date: 2026-02-07
+2026-02-07 14:24:31 - __main__ - INFO - Reading Bronze application_train from hdfs://namenode:8020/raw/postgres/application/application_train
+2026-02-07 14:24:31 - __main__ - INFO - Reading Bronze application_test from hdfs://namenode:8020/raw/postgres/application/application_test
+2026-02-07 14:24:42 - __main__ - INFO - Bronze rows: application_train=922533, application_test=48744
+2026-02-07 14:24:44 - __main__ - INFO - Union total rows: 971277
+2026-02-07 14:24:57 - __main__ - INFO - Validation failures: SK_ID_CURR null=0, AMT_INCOME_TOTAL invalid=0, AMT_CREDIT invalid=0, age<18=0, AMT_ANNUITY invalid=0, AMT_CREDIT<AMT_ANNUITY=0, CODE_GENDER invalid=12
+2026-02-07 14:25:00 - __main__ - INFO - Rows passing all 7 validation rules: 971265 (dropped 12)
+2026-02-07 14:25:00 - __main__ - INFO - Writing Silver to hdfs://namenode:8020/silver/silver_client_application (partitioned by year/month/day)
+2026-02-07 14:25:51 - __main__ - INFO - Silver silver_client_application written: 971265 rows
+2026-02-07 14:25:51 - __main__ - INFO - Reading Bronze bureau from hdfs://namenode:8020/raw/csv/bureau
+2026-02-07 14:25:51 - __main__ - INFO - Reading Bronze bureau_balance from hdfs://namenode:8020/raw/csv/bureau_balance
+2026-02-07 14:25:53 - __main__ - INFO - Bronze rows: bureau=1716428, bureau_balance=27299925
+2026-02-07 14:25:57 - __main__ - INFO - silver_bureau_summary: client rows before validation = 305811
+2026-02-07 14:25:58 - __main__ - INFO - silver_bureau_summary: SK_ID_CURR null rows = 0
+2026-02-07 14:26:00 - __main__ - INFO - silver_bureau_summary: valid client rows = 305811 (dropped 0)
+2026-02-07 14:26:00 - __main__ - INFO - Writing Silver to hdfs://namenode:8020/silver/silver_bureau_summary (partitioned by year/month/day)
+2026-02-07 14:26:19 - __main__ - INFO - Silver silver_bureau_summary written: 305811 rows
+2026-02-07 14:26:19 - __main__ - INFO - Reading Bronze installments_payments from hdfs://namenode:8020/raw/csv/installments_payments
+2026-02-07 14:26:19 - __main__ - INFO - Bronze rows: installments_payments=13605401
+2026-02-07 14:26:45 - __main__ - INFO - Cached installments_payments for reuse
+2026-02-07 14:26:51 - __main__ - INFO - silver_payment_behavior: client rows before validation = 339587
+2026-02-07 14:26:52 - __main__ - INFO - silver_payment_behavior: SK_ID_CURR null rows = 0
+2026-02-07 14:26:55 - __main__ - INFO - silver_payment_behavior: valid client rows = 339587 (dropped 0)
+2026-02-07 14:26:55 - __main__ - INFO - Writing Silver to hdfs://namenode:8020/silver/silver_payment_behavior (partitioned by year/month/day)
+2026-02-07 14:27:41 - __main__ - INFO - Silver silver_payment_behavior written: 339587 rows
+2026-02-07 14:27:41 - __main__ - INFO - Reading Bronze previous_application from hdfs://namenode:8020/raw/csv/previous_application
+2026-02-07 14:27:43 - __main__ - INFO - Bronze rows: previous_application=1670214
+2026-02-07 14:27:50 - __main__ - INFO - silver_previous_applications: client rows before validation = 338857
+2026-02-07 14:27:51 - __main__ - INFO - silver_previous_applications: SK_ID_CURR null rows = 0
+2026-02-07 14:27:56 - __main__ - INFO - silver_previous_applications: valid client rows = 338857 (dropped 0)
+2026-02-07 14:27:56 - __main__ - INFO - Writing Silver to hdfs://namenode:8020/silver/silver_previous_applications (partitioned by year/month/day)
+2026-02-07 14:28:11 - __main__ - INFO - Silver silver_previous_applications written: 338857 rows
+2026-02-07 14:28:12 - __main__ - INFO - Silver processor completed successfully

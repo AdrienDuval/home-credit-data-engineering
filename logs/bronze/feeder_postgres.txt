@@ -1,0 +1,9 @@
+2026-02-07 14:09:51 - __main__ - INFO - Log file: /opt/spark/work-dir/logs/bronze/feeder_postgres.txt
+2026-02-07 14:09:51 - __main__ - INFO - Starting Bronze PostgreSQL ingestion job
+2026-02-07 14:09:51 - __main__ - INFO - Table: raw.application_train
+2026-02-07 14:09:51 - __main__ - INFO - Ingest date: 2026-02-07
+2026-02-07 14:09:54 - __main__ - INFO - Reading data from PostgreSQL via JDBC
+2026-02-07 14:10:03 - __main__ - INFO - Rows read from source: 307511
+2026-02-07 14:10:03 - __main__ - INFO - Writing Bronze data to HDFS: hdfs://namenode:8020/raw/postgres/application/application_train/ingest_date=2026-02-07
+2026-02-07 14:10:49 - __main__ - INFO - Rows written to Bronze: 307511
+2026-02-07 14:10:49 - __main__ - INFO - Bronze PostgreSQL ingestion completed successfully

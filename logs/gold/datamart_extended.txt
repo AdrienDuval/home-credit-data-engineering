@@ -1,0 +1,23 @@
+2026-02-07 05:01:41 - __main__ - INFO - Log file: /opt/spark/work-dir/logs/gold/datamart_extended.txt
+2026-02-07 05:01:41 - __main__ - INFO - Datamart extended start: bronze_csv_base=hdfs://namenode:8020/raw/csv, ingest_date=2026-02-06
+2026-02-07 05:01:46 - __main__ - INFO - Reading Bronze bureau from hdfs://namenode:8020/raw/csv/bureau/year=2026/month=2/day=6
+2026-02-07 05:01:50 - __main__ - WARNING - Bureau load skipped (path or schema): [PATH_NOT_FOUND] Path does not exist: hdfs://namenode:8020/raw/csv/bureau/year=2026/month=2/day=6.
+2026-02-07 05:01:50 - __main__ - INFO - Reading Bronze previous_application from hdfs://namenode:8020/raw/csv/previous_application/year=2026/month=2/day=6
+2026-02-07 05:01:50 - __main__ - WARNING - Previous applications load skipped: [PATH_NOT_FOUND] Path does not exist: hdfs://namenode:8020/raw/csv/previous_application/year=2026/month=2/day=6.
+2026-02-07 05:01:51 - __main__ - INFO - Datamart extended load completed
+2026-02-07 14:39:56 - __main__ - INFO - Log file: /opt/spark/work-dir/logs/gold/datamart_extended.txt
+2026-02-07 14:39:56 - __main__ - INFO - Datamart extended start: bronze_csv_base=hdfs://namenode:8020/raw/csv, ingest_date=2026-02-07
+2026-02-07 14:39:59 - __main__ - INFO - Reading Bronze bureau from hdfs://namenode:8020/raw/csv/bureau/year=2026/month=2/day=7
+2026-02-07 14:40:03 - __main__ - WARNING - Bureau load skipped (path or schema): [PATH_NOT_FOUND] Path does not exist: hdfs://namenode:8020/raw/csv/bureau/year=2026/month=2/day=7.
+2026-02-07 14:40:03 - __main__ - INFO - Reading Bronze previous_application from hdfs://namenode:8020/raw/csv/previous_application/year=2026/month=2/day=7
+2026-02-07 14:40:03 - __main__ - WARNING - Previous applications load skipped: [PATH_NOT_FOUND] Path does not exist: hdfs://namenode:8020/raw/csv/previous_application/year=2026/month=2/day=7.
+2026-02-07 14:40:03 - __main__ - INFO - Datamart extended load completed
+2026-02-07 15:08:51 - __main__ - INFO - Log file: /opt/spark/work-dir/logs/gold/datamart_extended.txt
+2026-02-07 15:08:51 - __main__ - INFO - Datamart extended start: bronze_csv_base=hdfs://namenode:8020/raw/csv, ingest_date=2026-02-07
+2026-02-07 15:08:53 - __main__ - INFO - Reading Bronze bureau from hdfs://namenode:8020/raw/csv/bureau/ingest_date=2026-02-07
+2026-02-07 15:09:03 - __main__ - INFO - Bureau rows to write: 1716428
+2026-02-07 15:09:27 - __main__ - INFO - Written to datamart.datamart_client_bureau
+2026-02-07 15:09:27 - __main__ - INFO - Reading Bronze previous_application from hdfs://namenode:8020/raw/csv/previous_application/ingest_date=2026-02-07
+2026-02-07 15:09:29 - __main__ - INFO - Previous application rows to write: 1670214
+2026-02-07 15:10:04 - __main__ - INFO - Written to datamart.datamart_client_previous_apps
+2026-02-07 15:10:04 - __main__ - INFO - Datamart extended load completed

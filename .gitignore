@@ -2,10 +2,40 @@
 data/
 home-credit-default-risk.zip
 
+# Environment (secrets)
+.env
+.env.local
+api/.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+*.egg-info/
+.eggs/
+
+# Logs (keep structure, ignore content)
+logs/*.txt
+!logs/**/.gitkeep
+
 # OS / editor artifacts
 *.log
 *.tmp
 *.swp
 .DS_Store
 .vscode/
+.idea/
+
+# Next.js / frontend
+frontend/.next/
+frontend/node_modules/
+frontend/.env.local
+
+# Excel temp locks
+~$*.xlsx
+~$*.xls
+
+# Unused / generated images (we use docs/medallion-architecture.png)
+/ChatGPT Image*.png
 

@@ -1,19 +1,21 @@
-## Home Credit Data Engineering – Credit Risk Lakehouse
+# Home Credit Data Engineering – Credit Risk Lakehouse
 
-This repository contains a **banking credit risk analysis** project built on a **Lakehouse Medallion architecture (Bronze / Silver / Gold)** using the Home Credit Default Risk dataset.
+Projet d’**analyse du risque de crédit** (dataset Home Credit Default Risk) sur une **architecture Lakehouse Medaillon (Bronze / Silver / Gold)**.
 
-The main goals are to:
-- **Ingest raw banking-style data** into a Bronze layer (HDFS-style storage)
-- **Clean, normalize, and join datasets** in a Silver layer using PySpark / Spark SQL
-- **Produce analytical Gold tables and datamarts** (e.g. in PostgreSQL) for:
-  - Credit risk indicators and default probabilities
-  - Portfolio monitoring and exposure analysis
-  - Management and regulatory-style reporting
+![Architecture Medaillon – Pipeline Banking Credit Risk](docs/medallion-architecture.png)
 
-High-level pipeline:
-1. **Bronze** – raw CSV ingestion of all source files.
-2. **Silver** – validation, enrichment, joins, window functions, and Parquet storage.
-3. **Gold** – business KPIs, credit risk metrics, and reporting-friendly tables.
+## Architecture
 
-This repo is focused on the **engineering pipeline and architecture**, not on storing the raw data itself (see `.gitignore`).
+**Sources** (PostgreSQL + fichiers CSV) → **Bronze** (données brutes HDFS) → **Silver** (validation, jointures, agrégations) → **Gold** (KPIs risque, portefeuille) → **Datamarts PostgreSQL** → **API (JWT) + Dashboard Next.js**.
 
+- **Script de présentation (français) :** [PRESENTATION_PROJET.md](PRESENTATION_PROJET.md) — objectifs, Docker, architecture medaillon, étapes, revue des résultats.
+- **Commandes d’exécution :** [run.md](run.md) — ingestion Bronze, Silver, Gold, datamarts.
+- **Checklist datamarts complète :** [DATAMART_SETUP.md](DATAMART_SETUP.md).
+
+## Démarrage rapide
+
+```bash
+docker compose up -d
+```
+
+Puis suivre [run.md](run.md) pour l’ingestion Bronze, Silver, Gold et le chargement des datamarts.
