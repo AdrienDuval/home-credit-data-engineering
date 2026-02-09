@@ -59,6 +59,73 @@ services:
       - home_credit_net
 
   # =========================
+  # YARN ResourceManager (cluster resource manager; use with --master yarn)
+  # =========================
+  resourcemanager:
+    image: bde2020/hadoop-resourcemanager:2.0.0-hadoop3.2.1-java8
+    container_name: home_credit_resourcemanager
+    restart: always
+    environment:
+      SERVICE_PRECONDITION: "namenode:9870 datanode:9864"
+    env_file:
+      - ./docker/hadoop.env
+    ports:
+      - "8088:8088"
+    networks:
+      - home_credit_net
+    depends_on:
+      - namenode
+      - datanode
+
+  # =========================
+  # YARN NodeManager (runs containers for Spark executors)
+  # =========================
+  nodemanager:
+    image: bde2020/hadoop-nodemanager:2.0.0-hadoop3.2.1-java8
+    container_name: home_credit_nodemanager
+    restart: always
+    environment:
+      SERVICE_PRECONDITION: "namenode:9870 datanode:9864 resourcemanager:8088"
+    env_file:
+      - ./docker/hadoop.env
+    ports:
+      - "8042:8042"
+    volumes:
+      # So YARN executors can read local CSV paths (file:///opt/spark/work-dir/data/...)
+      - ./data:/opt/spark/work-dir/data
+    networks:
+      - home_credit_net
+    depends_on:
+      - namenode
+      - datanode
+      - resourcemanager
+
+  # =========================
+  # Hive Metastore (catalog for Silver/Gold tables on HDFS)
+  # =========================
+  hive-metastore:
+    image: apache/hive:3.1.3
+    container_name: home_credit_hive_metastore
+    restart: always
+    environment:
+      SERVICE_NAME: metastore
+      DB_DRIVER: postgres
+      SERVICE_OPTS: >-
+        -Djavax.jdo.option.ConnectionDriverName=org.postgresql.Driver
+        -Djavax.jdo.option.ConnectionURL=jdbc:postgresql://postgres:5432/metastore_db
+        -Djavax.jdo.option.ConnectionUserName=hive
+        -Djavax.jdo.option.ConnectionPassword=hive
+        -Dhive.metastore.warehouse.dir=hdfs://namenode:8020/user/hive/warehouse
+        -Dfs.defaultFS=hdfs://namenode:8020
+    ports:
+      - "9083:9083"
+    depends_on:
+      - namenode
+      - postgres
+    networks:
+      - home_credit_net
+
+  # =========================
   # Spark Master (OFFICIAL)
   # =========================
   spark-master:
@@ -69,11 +136,14 @@ services:
     ports:
       - "8080:8080"
       - "7077:7077"
+    environment:
+      - HADOOP_CONF_DIR=/opt/spark/work-dir/docker/hadoop-conf
     networks:
       - home_credit_net
     volumes:
       - ./:/opt/spark/work-dir
-      - ./jars/postgresql-42.7.9.jar:/opt/spark/jars/postgresql.jar  # optional: copy into Spark's jars
+      - ./jars/postgresql-42.7.9.jar:/opt/spark/jars/postgresql.jar
+      - ./docker/hadoop-conf:/opt/spark/work-dir/docker/hadoop-conf
 
   # =========================
   # Spark Worker (OFFICIAL)
@@ -83,12 +153,15 @@ services:
     container_name: home_credit_spark_worker
     restart: always
     command: /opt/spark/bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077
+    environment:
+      - HADOOP_CONF_DIR=/opt/spark/work-dir/docker/hadoop-conf
     depends_on:
       - spark-master
     networks:
       - home_credit_net
     volumes:
       - ./:/opt/spark/work-dir
+      - ./docker/hadoop-conf:/opt/spark/work-dir/docker/hadoop-conf
 
 volumes:
   postgres_data:

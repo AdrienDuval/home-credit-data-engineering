@@ -2,22 +2,49 @@
 
 Commands to run from your host (PowerShell or bash). Containers must be up (`docker compose up -d`).
 
-**Présentation du projet (objectifs, Docker, architecture medaillon, résultats) :** voir **[PRESENTATION_PROJET.md](PRESENTATION_PROJET.md)** (script de présentation en français).
+**Deux modes d’exécution Spark :** **Standalone** (`--master spark://spark-master:7077`, par défaut ci‑dessous) ou **YARN** (`--master yarn`). Voir [§ 1.1 Choix du cluster manager (Standalone vs YARN)](#11-choix-du-cluster-manager-standalone-vs-yarn).
 
 **Log files:** Bronze: `logs/bronze/feeder_postgres.txt`, `logs/bronze/feeder_csv.txt`. Silver: `logs/silver/processor.txt`. Gold: `logs/gold/processor.txt`. All append; use for debugging.
-
-**Full datamart (client list, client detail by ID, bureau, previous applications):** see **[DATAMART_SETUP.md](DATAMART_SETUP.md)** for a step-by-step checklist and all commands.
 
 ---
 
 ## 1. One-time HDFS setup
 
-Run **once** (or when you see *Permission denied* writing to HDFS). Creates `/raw`, `/silver`, and `/gold` and allows Spark to write.
+Run **once** (or when you see *Permission denied* writing to HDFS). Creates `/raw`, `/silver`, and `/gold` and allows Spark to write. If you use **YARN**, also create the RM state directory.
 
 ```bash
 docker exec -it home_credit_namenode hdfs dfs -mkdir -p /raw /silver /gold
 docker exec -it home_credit_namenode hdfs dfs -chmod -R 777 /raw /silver /gold
+
+# Required for YARN ResourceManager (if you use --master yarn)
+docker exec -it home_credit_namenode hdfs dfs -mkdir -p /rmstate
+docker exec -it home_credit_namenode hdfs dfs -chmod -R 777 /rmstate
+
+# Required for Spark on YARN: user "spark" needs write under /user (staging dirs)
+docker exec -it home_credit_namenode hdfs dfs -mkdir -p /user/spark
+docker exec -it home_credit_namenode hdfs dfs -chmod -R 777 /user
 ```
+
+### 1.1 Choix du cluster manager (Standalone vs YARN)
+
+| Mode | Master | Quand l’utiliser |
+|------|--------|-------------------|
+| **Standalone** | `--master spark://spark-master:7077` | Par défaut. Spark Master + Worker dédiés, simple. |
+| **YARN** | `--master yarn` (client) ou `--master yarn --deploy-mode cluster` | Ressources gérées par YARN (ResourceManager + NodeManager), même cluster que MapReduce. |
+
+**Utiliser YARN :** Les conteneurs `resourcemanager` et `nodemanager` doivent être démarrés (`docker compose up -d`). Le Spark driver doit avoir accès à la config Hadoop : elle est montée dans le conteneur Spark (`HADOOP_CONF_DIR=/opt/spark/work-dir/docker/hadoop-conf`). Remplacez dans chaque commande `spark-submit` :
+
+- `--master spark://spark-master:7077` → `--master yarn`
+- (Optionnel) `--deploy-mode client` (défaut) ou `--deploy-mode cluster`
+
+**Exemple (Bronze CSV avec YARN) :**
+
+```bash
+docker exec -it home_credit_spark_master /opt/spark/bin/spark-submit --master yarn \
+  /opt/spark/work-dir/spark/bronze/feeder_csv.py --input-path /opt/spark/work-dir/data/bureau.csv --dataset-name bureau --ingest-date 2026-02-07
+```
+
+**UI YARN :** http://localhost:8088 (ResourceManager) ; http://localhost:8042 (NodeManager).
 
 ---
 
@@ -217,7 +244,7 @@ Use the same `--ingest-date` as your Gold partition. If your Postgres user/passw
 docker exec -it home_credit_spark_master /opt/spark/bin/spark-submit --master spark://spark-master:7077 --jars /opt/spark/work-dir/jars/postgresql-42.7.9.jar /opt/spark/work-dir/spark/gold/processor.py --ingest-date 2026-02-06 --write-datamart --jdbc-url "jdbc:postgresql://postgres:5432/home_credit" --jdbc-user home_credit_user --jdbc-password home_credit_pwd
 ```
 
-**Power BI:** See **[POWER_BI_DASHBOARD.md](POWER_BI_DASHBOARD.md)** for connection steps and how to build the three required charts (risk distribution, default rate per segment, credit exposure per segment).
+**Power BI:** Connect to the same server/database/user as the API (see § 5.2). Build the three charts from `datamart.datamart_client_risk` and `datamart.datamart_portfolio_summary`: risk distribution, default rate per segment, credit exposure per segment.
 
 ### 5.2 Verify PostgreSQL datamart (ready for Power BI)
 
@@ -264,6 +291,25 @@ docker exec -it home_credit_spark_master /opt/spark/bin/spark-submit --master sp
 ```
 
 After this, the API endpoints `GET /clients/risk/{id}/bureau` and `GET /clients/risk/{id}/previous-applications` return data, and the client detail page in the frontend shows the two tables.
+
+### 5.4 Hive — Register Silver and Gold as Hive tables
+
+**Hive Metastore** catalogs Silver and Gold Parquet on HDFS so you can query by table name (HiveQL or Spark SQL). The `hive-metastore` service must be up (`docker compose up -d`).
+
+**One-time:** create HDFS directory for Hive warehouse (if not exists):
+
+```bash
+docker exec -it home_credit_namenode hdfs dfs -mkdir -p /user/hive/warehouse
+docker exec -it home_credit_namenode hdfs dfs -chmod -R 777 /user/hive/warehouse
+```
+
+**Register tables** (run after Silver and Gold have written data; use the same `--ingest-date` as your pipeline):
+
+```bash
+docker exec -it home_credit_spark_master /opt/spark/bin/spark-submit --master spark://spark-master:7077 /opt/spark/work-dir/spark/common/register_hive_tables.py --metastore-uri thrift://hive-metastore:9083 --ingest-date 2026-02-07
+```
+
+This creates Hive databases `silver_db` and `gold_db` and registers external tables pointing to the existing Parquet paths. You can then query via **Beeline** (HiveServer2) or **Spark SQL** with `USE silver_db; SHOW TABLES; SELECT * FROM silver_client_application LIMIT 10;`.
 
 ---
 

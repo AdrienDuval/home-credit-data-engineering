@@ -82,3 +82,20 @@
 2026-02-07 14:39:39 - __main__ - INFO - Writing to datamart.datamart_portfolio_summary (mode overwrite)
 2026-02-07 14:39:39 - __main__ - INFO - Datamart write completed: datamart.datamart_client_risk, datamart.datamart_portfolio_summary
 2026-02-07 14:39:40 - __main__ - INFO - Gold processor completed successfully
+2026-02-08 16:26:50 - __main__ - INFO - Log file: /opt/spark/work-dir/logs/gold/processor.txt
+2026-02-08 16:26:50 - __main__ - INFO - Gold processor start: silver_base=hdfs://namenode:8020/silver, gold_base=hdfs://namenode:8020/gold, ingest_date=2026-02-08
+2026-02-08 16:27:24 - __main__ - INFO - Reading Silver tables for partition year=2026/month=2/day=8
+2026-02-08 16:28:10 - __main__ - INFO - Silver row counts: application=1327516, bureau_summary=305811, payment_behavior=339587, previous_applications=338857
+2026-02-08 16:28:20 - __main__ - INFO - Writing Gold to hdfs://namenode:8020/gold/gold_client_risk_profile (partitioned by year/month/day)
+2026-02-08 16:29:05 - __main__ - INFO - Gold gold_client_risk_profile written: 1327516 rows
+2026-02-08 16:29:05 - __main__ - INFO - Reading gold_client_risk_profile from hdfs://namenode:8020/gold/gold_client_risk_profile/year=2026/month=2/day=8
+2026-02-08 16:29:07 - __main__ - INFO - gold_client_risk_profile rows: 1327516
+2026-02-08 16:29:07 - __main__ - INFO - Writing Gold to hdfs://namenode:8020/gold/gold_portfolio_risk (partitioned by year/month/day)
+2026-02-08 16:29:18 - __main__ - INFO - Gold gold_portfolio_risk written: 3 rows (one per risk_segment)
+2026-02-08 16:29:18 - __main__ - INFO - Writing Gold to PostgreSQL datamart (for Power BI)
+2026-02-08 16:29:18 - __main__ - INFO - Reading gold_client_risk_profile from hdfs://namenode:8020/gold/gold_client_risk_profile/year=2026/month=2/day=8 for datamart
+2026-02-08 16:29:20 - __main__ - INFO - Writing to datamart.datamart_client_risk (mode overwrite)
+2026-02-08 16:29:57 - __main__ - INFO - Reading gold_portfolio_risk from hdfs://namenode:8020/gold/gold_portfolio_risk/year=2026/month=2/day=8 for datamart
+2026-02-08 16:29:58 - __main__ - INFO - Writing to datamart.datamart_portfolio_summary (mode overwrite)
+2026-02-08 16:29:59 - __main__ - INFO - Datamart write completed: datamart.datamart_client_risk, datamart.datamart_portfolio_summary
+2026-02-08 16:30:00 - __main__ - INFO - Gold processor completed successfully

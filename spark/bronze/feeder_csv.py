@@ -61,11 +61,21 @@ def parse_args():
     return parser.parse_args()
 
 
+def _normalize_input_path(path: str) -> str:
+    """If path is absolute and has no scheme, use file:// so YARN (default FS = HDFS) reads locally."""
+    if not path or "://" in path:
+        return path
+    if path.startswith("/"):
+        return "file://" + path
+    return path
+
+
 def main():
     args = parse_args()
+    input_path = _normalize_input_path(args.input_path)
     logger.info("Starting Bronze CSV ingestion job")
     logger.info("Dataset: %s", args.dataset_name)
-    logger.info("Input path: %s", args.input_path)
+    logger.info("Input path: %s", input_path)
     logger.info("HDFS base path: %s", args.hdfs_base_path)
     logger.info("Ingest date: %s", args.ingest_date)
 
@@ -81,12 +91,12 @@ def main():
         # -------------------------------------------------------------------------
         # Read CSV (raw: header + schema inference, no business logic)
         # -------------------------------------------------------------------------
-        logger.info("Reading CSV from %s", args.input_path)
+        logger.info("Reading CSV from %s", input_path)
         df = (
             spark.read
             .option("header", "true")
             .option("inferSchema", "true")
-            .csv(args.input_path)
+            .csv(input_path)
         )
 
         source_count = df.count()

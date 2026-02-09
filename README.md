@@ -8,9 +8,13 @@ Projet d’**analyse du risque de crédit** (dataset Home Credit Default Risk) s
 
 **Sources** (PostgreSQL + fichiers CSV) → **Bronze** (données brutes HDFS) → **Silver** (validation, jointures, agrégations) → **Gold** (KPIs risque, portefeuille) → **Datamarts PostgreSQL** → **API (JWT) + Dashboard Next.js**.
 
-- **Script de présentation (français) :** [PRESENTATION_PROJET.md](PRESENTATION_PROJET.md) — objectifs, Docker, architecture medaillon, étapes, revue des résultats.
-- **Commandes d’exécution :** [run.md](run.md) — ingestion Bronze, Silver, Gold, datamarts.
-- **Checklist datamarts complète :** [DATAMART_SETUP.md](DATAMART_SETUP.md).
+- **Commandes d’exécution :** [run.md](run.md) — ingestion Bronze, Silver, Gold, datamarts (Standalone ou YARN).
+
+## Vérification des tables Gold (PostgreSQL)
+
+Après exécution du Gold processor et chargement des datamarts, les tables du schéma `datamart` dans PostgreSQL contiennent les données agrégées (risque client, portefeuille, bureau, anciennes demandes). Exemple de vérification des effectifs :
+
+![Tables Gold PostgreSQL — Gold processor et comptages datamart](docs/screenshot%20os%20postgress%20gold%20tables.png)
 
 ## Démarrage rapide
 
